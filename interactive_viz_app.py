@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(layout="wide")
-st.title("🎨 Interactive Visualization Dashboard")
+st.title("🎨 Advanced Interactive Visualization Dashboard")
 st.markdown("Upload or generate data, choose visualization types, and customize aesthetics!")
 
 # ----------------------
@@ -62,6 +62,15 @@ if not numeric_cols:
 # ----------------------
 st.sidebar.header("2️⃣ Visualization Settings")
 viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
+
+# ----------------------
+# Aesthetic settings
+# ----------------------
+st.sidebar.header("3️⃣ Aesthetics Settings")
+color = st.sidebar.color_picker("Pick a color", "#FF6347")
+marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
+line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
+bins = st.sidebar.slider("Number of bins", 5, 50, 20)
 
 # ----------------------
 # 1D Visualization
@@ -138,17 +147,6 @@ elif viz_type == "3D":
 
     ax.set_title(plot_type)
     st.pyplot(fig)
-
-
-# ----------------------
-# Aesthetic settings
-# ----------------------
-st.sidebar.header("3️⃣ Aesthetics Settings")
-color = st.sidebar.color_picker("Pick a color", "#FF6347")
-marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
-line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
-bins = st.sidebar.slider("Number of bins", 5, 50, 20)
-
 
 # ----------------------
 # Footer
