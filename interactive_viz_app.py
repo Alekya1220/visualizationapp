@@ -1,4 +1,3 @@
-%%writefile interactive_viz_app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -138,3 +137,4 @@ elif viz_type == "3D":
     x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
     y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
     z_col = st.sidebar.selectbox("Select_
+
