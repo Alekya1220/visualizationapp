@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(layout="wide")
-st.title("🎨 Interactive Visualization Dashboard")
-st.markdown("Upload or generate data, then explore it with customizable visualizations!")
+st.title("🎨 Advanced Interactive Visualization Dashboard")
+st.markdown("Upload or generate data, choose visualization types, and customize aesthetics!")
 
 # ----------------------
 # Data input section
@@ -58,16 +58,15 @@ if not numeric_cols:
     st.stop()
 
 # ----------------------
-# Visualization settings
+# Visualization selection
 # ----------------------
 st.sidebar.header("2️⃣ Visualization Settings")
 viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
 
 # ----------------------
-# Aesthetics settings
+# Aesthetic settings
 # ----------------------
 st.sidebar.header("3️⃣ Aesthetics Settings")
-
 color = st.sidebar.color_picker("Pick a color", "#FF6347")
 marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
 line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
@@ -101,7 +100,7 @@ if viz_type == "1D":
 # ----------------------
 elif viz_type == "2D":
     st.sidebar.subheader("2D Plot Options")
-    plot_type = st.sidebar.selectbox("Select Plot Type", ["Scatter Plot", "Box Plot"])
+    plot_type = st.sidebar.selectbox("Select Plot Type", ["Scatter Plot", "Box Plot", "Line Plot"])
     x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
     y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
 
@@ -114,6 +113,10 @@ elif viz_type == "2D":
         ax.set_ylabel(y_col)
     elif plot_type == "Box Plot":
         df[[x_col, y_col]].plot(kind="box", ax=ax)
+    elif plot_type == "Line Plot":
+        ax.plot(df[x_col], df[y_col], marker="o", linestyle=line_style, color=color)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
 
     ax.set_title(f"{plot_type} of {x_col} & {y_col}")
     st.pyplot(fig)
