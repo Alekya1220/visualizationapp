@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(layout="wide")
-st.title("🎨 Streamlined Interactive Visualization Dashboard")
-st.markdown("Upload or generate data, choose visualization types, and customize aesthetics in a unified interface!")
+st.title("🎨 Interactive Visualization Dashboard")
+st.markdown("Upload or generate data, choose visualization types, and customize aesthetics!")
 
 # ----------------------
 # Data input section
@@ -58,21 +58,87 @@ if not numeric_cols:
     st.stop()
 
 # ----------------------
-# Visualization selection integrated
+# Visualization selection
 # ----------------------
-st.sidebar.header("2️⃣ Visualization Type")
+st.sidebar.header("2️⃣ Visualization Settings")
+viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
 
-viz_options = [
-    "1D → Histogram",
-    "1D → Line Plot",
-    "1D → Bar Plot",
-    "2D → Scatter Plot",
-    "2D → Box Plot",
-    "2D → Line Plot",
-    "3D → Scatter Plot",
-    "3D → Surface Plot"
-]
-viz_type = st.sidebar.selectbox("Choose Visualization Type", viz_options)
+# ----------------------
+# 1D Visualization
+# ----------------------
+if viz_type == "1D":
+    st.sidebar.subheader("1D Plot Options")
+    plot_type = st.sidebar.selectbox("Select Plot Type", ["Histogram", "Line Plot", "Bar Plot"])
+    col = st.sidebar.selectbox("Select Column", numeric_cols)
+
+    st.write(f"### 📈 {plot_type} of {col}")
+    fig, ax = plt.subplots()
+
+    if plot_type == "Histogram":
+        ax.hist(df[col], bins=bins, color=color, edgecolor="black")
+    elif plot_type == "Line Plot":
+        ax.plot(df[col], marker="o", linestyle=line_style, color=color)
+    elif plot_type == "Bar Plot":
+        ax.bar(df.index, df[col], color=color)
+
+    ax.set_xlabel(col)
+    ax.set_ylabel("Value")
+    ax.set_title(f"{plot_type} of {col}")
+    st.pyplot(fig)
+
+# ----------------------
+# 2D Visualization
+# ----------------------
+elif viz_type == "2D":
+    st.sidebar.subheader("2D Plot Options")
+    plot_type = st.sidebar.selectbox("Select Plot Type", ["Scatter Plot", "Box Plot", "Line Plot"])
+    x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
+    y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
+
+    st.write(f"### 📊 {plot_type} ({x_col} vs {y_col})")
+    fig, ax = plt.subplots()
+
+    if plot_type == "Scatter Plot":
+        ax.scatter(df[x_col], df[y_col], c=color, alpha=0.6, s=marker_size)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+    elif plot_type == "Box Plot":
+        df[[x_col, y_col]].plot(kind="box", ax=ax)
+    elif plot_type == "Line Plot":
+        ax.plot(df[x_col], df[y_col], marker="o", linestyle=line_style, color=color)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+
+    ax.set_title(f"{plot_type} of {x_col} & {y_col}")
+    st.pyplot(fig)
+
+# ----------------------
+# 3D Visualization
+# ----------------------
+elif viz_type == "3D":
+    st.sidebar.subheader("3D Plot Options")
+    plot_type = st.sidebar.selectbox("Select Plot Type", ["3D Scatter Plot", "3D Surface Plot"])
+    x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
+    y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
+    z_col = st.sidebar.selectbox("Select Z-axis", numeric_cols)
+
+    st.write(f"### 🧩 {plot_type}")
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+
+    if plot_type == "3D Scatter Plot":
+        ax.scatter(df[x_col], df[y_col], df[z_col], c=color, alpha=0.6, s=marker_size)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+        ax.set_zlabel(z_col)
+    elif plot_type == "3D Surface Plot":
+        X, Y = np.meshgrid(df[x_col], df[y_col])
+        Z = np.sin(X) + np.cos(Y)
+        ax.plot_surface(X, Y, Z, cmap="viridis")
+
+    ax.set_title(plot_type)
+    st.pyplot(fig)
+
 
 # ----------------------
 # Aesthetic settings
@@ -83,73 +149,6 @@ marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
 line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
 bins = st.sidebar.slider("Number of bins", 5, 50, 20)
 
-# ----------------------
-# Visualization logic
-# ----------------------
-
-# 1D Plots
-if viz_type.startswith("1D"):
-    st.sidebar.subheader("Select Column")
-    col = st.sidebar.selectbox("Select Column", numeric_cols)
-    st.write(f"### 📈 {viz_type} of {col}")
-    fig, ax = plt.subplots()
-
-    if viz_type == "1D → Histogram":
-        ax.hist(df[col], bins=bins, color=color, edgecolor="black")
-    elif viz_type == "1D → Line Plot":
-        ax.plot(df[col], marker="o", linestyle=line_style, color=color)
-    elif viz_type == "1D → Bar Plot":
-        ax.bar(df.index, df[col], color=color)
-
-    ax.set_xlabel(col)
-    ax.set_ylabel("Value")
-    ax.set_title(f"{viz_type} of {col}")
-    st.pyplot(fig)
-
-# 2D Plots
-elif viz_type.startswith("2D"):
-    st.sidebar.subheader("Select Columns")
-    x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
-    y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
-    st.write(f"### 📊 {viz_type} ({x_col} vs {y_col})")
-    fig, ax = plt.subplots()
-
-    if viz_type == "2D → Scatter Plot":
-        ax.scatter(df[x_col], df[y_col], c=color, alpha=0.6, s=marker_size)
-        ax.set_xlabel(x_col)
-        ax.set_ylabel(y_col)
-    elif viz_type == "2D → Box Plot":
-        df[[x_col, y_col]].plot(kind="box", ax=ax)
-    elif viz_type == "2D → Line Plot":
-        ax.plot(df[x_col], df[y_col], marker="o", linestyle=line_style, color=color)
-        ax.set_xlabel(x_col)
-        ax.set_ylabel(y_col)
-
-    ax.set_title(f"{viz_type} of {x_col} & {y_col}")
-    st.pyplot(fig)
-
-# 3D Plots
-elif viz_type.startswith("3D"):
-    st.sidebar.subheader("Select Columns")
-    x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
-    y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
-    z_col = st.sidebar.selectbox("Select Z-axis", numeric_cols)
-    st.write(f"### 🧩 {viz_type}")
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-
-    if viz_type == "3D → Scatter Plot":
-        ax.scatter(df[x_col], df[y_col], df[z_col], c=color, alpha=0.6, s=marker_size)
-        ax.set_xlabel(x_col)
-        ax.set_ylabel(y_col)
-        ax.set_zlabel(z_col)
-    elif viz_type == "3D → Surface Plot":
-        X, Y = np.meshgrid(df[x_col], df[y_col])
-        Z = np.sin(X) + np.cos(Y)
-        ax.plot_surface(X, Y, Z, cmap="viridis")
-
-    ax.set_title(viz_type)
-    st.pyplot(fig)
 
 # ----------------------
 # Footer
