@@ -1,4 +1,3 @@
-%%writefile interactive_viz_app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -119,3 +118,4 @@ if viz_type == "1D":
 # ----------------------
 # 2D Visualization
 # --------
+
