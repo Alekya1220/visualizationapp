@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(layout="wide")
 st.title("🎨 Advanced Interactive Visualization Dashboard")
-st.markdown("Upload or generate data, select required columns, choose visualization types, and customize aesthetics!")
+st.markdown("Upload or generate data, choose visualization types, and customize aesthetics!")
 
 # ----------------------
 # Data input section
@@ -27,6 +27,7 @@ if data_source == "Upload File":
             elif file_format == "xlsx":
                 df = pd.read_excel(uploaded_file)
             elif file_format == "txt":
+                # Try reading with common delimiters
                 try:
                     df = pd.read_csv(uploaded_file, sep="\t")
                 except:
@@ -55,39 +56,24 @@ st.write("### 📋 Data Preview")
 st.dataframe(df.head())
 
 # ----------------------
-# Column selection
+# Select numeric columns
 # ----------------------
-st.sidebar.header("2️⃣ Select Required Columns")
-all_columns = df.columns.tolist()
-selected_columns = st.sidebar.multiselect("Select columns to use for visualization", all_columns, default=all_columns)
-
-if not selected_columns:
-    st.error("Please select at least one column.")
-    st.stop()
-
-df = df[selected_columns]
-
-# Show updated data
-st.write("### 📂 Selected Data")
-st.dataframe(df.head())
-
-# Identify numeric columns
 numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
 
 if not numeric_cols:
-    st.error("No numeric columns available for visualization after selection.")
+    st.error("No numeric columns available for visualization.")
     st.stop()
 
 # ----------------------
-# Visualization options
+# Visualization selection
 # ----------------------
-st.sidebar.header("3️⃣ Visualization Settings")
+st.sidebar.header("2️⃣ Visualization Settings")
 viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
 
 # ----------------------
 # Aesthetic settings
 # ----------------------
-st.sidebar.header("4️⃣ Aesthetics Settings")
+st.sidebar.header("3️⃣ Aesthetics Settings")
 color = st.sidebar.color_picker("Pick a color", "#FF6347")
 marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
 line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
