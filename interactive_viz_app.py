@@ -1,3 +1,4 @@
+%%writefile interactive_viz_app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -16,7 +17,7 @@ st.sidebar.header("1️⃣ Provide Your Data")
 data_source = st.sidebar.radio("Choose data source:", ["Upload File", "Generate Random Data"])
 
 if data_source == "Upload File":
-    file_types = ["csv", "xlsx"]
+    file_types = ["csv", "xlsx", "txt"]
     file_format = st.sidebar.selectbox("Select File Type", file_types)
     uploaded_file = st.sidebar.file_uploader("Upload your data file", type=file_types)
 
@@ -26,6 +27,13 @@ if data_source == "Upload File":
                 df = pd.read_csv(uploaded_file)
             elif file_format == "xlsx":
                 df = pd.read_excel(uploaded_file)
+            elif file_format == "txt":
+                # Try reading with common delimiters
+                try:
+                    df = pd.read_csv(uploaded_file, sep="\t")
+                except:
+                    uploaded_file.seek(0)
+                    df = pd.read_csv(uploaded_file, sep=",")
             st.success("File uploaded and loaded successfully!")
         except Exception as e:
             st.error(f"Error loading file: {e}")
@@ -129,27 +137,4 @@ elif viz_type == "3D":
     plot_type = st.sidebar.selectbox("Select Plot Type", ["3D Scatter Plot", "3D Surface Plot"])
     x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
     y_col = st.sidebar.selectbox("Select Y-axis", numeric_cols)
-    z_col = st.sidebar.selectbox("Select Z-axis", numeric_cols)
-
-    st.write(f"### 🧩 {plot_type}")
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-
-    if plot_type == "3D Scatter Plot":
-        ax.scatter(df[x_col], df[y_col], df[z_col], c=color, alpha=0.6, s=marker_size)
-        ax.set_xlabel(x_col)
-        ax.set_ylabel(y_col)
-        ax.set_zlabel(z_col)
-    elif plot_type == "3D Surface Plot":
-        X, Y = np.meshgrid(df[x_col], df[y_col])
-        Z = np.sin(X) + np.cos(Y)
-        ax.plot_surface(X, Y, Z, cmap="viridis")
-
-    ax.set_title(plot_type)
-    st.pyplot(fig)
-
-# ----------------------
-# Footer
-# ----------------------
-st.sidebar.markdown("---")
-st.sidebar.write("App built with Streamlit ✅ Customize your visuals interactively!")
+    z_col = st.sidebar.selectbox("Select_
