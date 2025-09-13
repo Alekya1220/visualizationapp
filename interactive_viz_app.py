@@ -5,47 +5,44 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # ----------------------
-# Custom CSS for background, fonts, and sidebar
+# Custom CSS for gradient background and sidebar aesthetics
 # ----------------------
 st.markdown("""
     <style>
-    /* Main background image */
+    /* Main background with soft gradient */
     .stApp {
-        background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         background-attachment: fixed;
-        color: #ffffff;
-        font-family: 'Arial', sans-serif;
+        color: #333333;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Sidebar styling */
+    /* Sidebar styling with soft transparency */
     .css-1d391kg {
-        background: rgba(0, 0, 0, 0.6);
-        color: #ffffff;
-        font-family: 'Arial', sans-serif;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333333;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     /* Sidebar headers */
     .css-1v3fvcr h2 {
-        color: #FFD700;
-        font-family: 'Georgia', serif;
+        color: #4A90E2;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     /* Input widgets */
     .stSelectbox, .stSlider, .stColorPicker {
         background: rgba(255, 255, 255, 0.8);
         border-radius: 8px;
+        color: #333333;
     }
 
     /* Markdown text */
     .stMarkdown {
-        color: #ffffff;
+        color: #333333;
     }
     </style>
     """, unsafe_allow_html=True)
-
-
 
 
 st.set_page_config(layout="wide")
@@ -220,6 +217,7 @@ elif viz_type == "3D":
 # ----------------------
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
+
 
 
 
