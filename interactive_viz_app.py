@@ -5,18 +5,17 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # ----------------------
-# Custom CSS for background image
+# Custom CSS for background
 # ----------------------
 st.markdown("""
     <style>
     .stApp {
-        background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
         background-attachment: fixed;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 st.set_page_config(layout="wide")
@@ -191,5 +190,6 @@ elif viz_type == "3D":
 # ----------------------
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
+
 
 
