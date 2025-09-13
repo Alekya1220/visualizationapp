@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 st.set_page_config(layout="wide")
 st.title("🎨 Advanced Interactive Visualization Dashboard")
-st.markdown("Upload or generate data, choose visualization types, and customize aesthetics!")
+st.markdown("Upload or generate data, select columns, choose visualization types, and customize aesthetics!")
 
 # ----------------------
 # Data input section
@@ -27,7 +27,6 @@ if data_source == "Upload File":
             elif file_format == "xlsx":
                 df = pd.read_excel(uploaded_file)
             elif file_format == "txt":
-                # Try reading with common delimiters
                 try:
                     df = pd.read_csv(uploaded_file, sep="\t")
                 except:
@@ -52,12 +51,29 @@ elif data_source == "Generate Random Data":
     })
     st.success("Random data generated!")
 
+# Show uploaded or generated data
 st.write("### 📋 Data Preview")
 st.dataframe(df.head())
 
 # ----------------------
-# Select numeric columns
+# Column selection
 # ----------------------
+st.sidebar.header("2️⃣ Select Columns")
+all_columns = df.columns.tolist()
+selected_columns = st.sidebar.multiselect("Select columns to include", all_columns, default=all_columns)
+
+if not selected_columns:
+    st.error("Please select at least one column.")
+    st.stop()
+
+# Filter the data based on selected columns
+df = df[selected_columns]
+
+# Show filtered data
+st.write("### 📂 Filtered Data")
+st.dataframe(df.head())
+
+# Identify numeric columns from selected ones
 numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
 
 if not numeric_cols:
@@ -65,15 +81,15 @@ if not numeric_cols:
     st.stop()
 
 # ----------------------
-# Visualization selection
+# Visualization settings
 # ----------------------
-st.sidebar.header("2️⃣ Visualization Settings")
+st.sidebar.header("3️⃣ Visualization Settings")
 viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
 
 # ----------------------
 # Aesthetic settings
 # ----------------------
-st.sidebar.header("3️⃣ Aesthetics Settings")
+st.sidebar.header("4️⃣ Aesthetics Settings")
 color = st.sidebar.color_picker("Pick a color", "#FF6347")
 marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
 line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
@@ -159,4 +175,4 @@ elif viz_type == "3D":
 # Footer
 # ----------------------
 st.sidebar.markdown("---")
-st.sidebar.write("App built with Streamlit ✅ Customize your visuals interactively!")
+st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
