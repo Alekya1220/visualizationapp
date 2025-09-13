@@ -4,6 +4,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+# ----------------------
+# Custom CSS for background image
+# ----------------------
+st.markdown("""
+    <style>
+    .stApp {
+        background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
 st.set_page_config(layout="wide")
 st.title("🎨 Advanced Interactive Visualization Dashboard")
 st.markdown("Upload or generate data, select columns, choose visualization types, and customize aesthetics!")
@@ -176,3 +191,4 @@ elif viz_type == "3D":
 # ----------------------
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
+
