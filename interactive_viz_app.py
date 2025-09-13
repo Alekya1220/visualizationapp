@@ -5,16 +5,46 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # ----------------------
-# Custom CSS for background
+# Custom CSS for background, fonts, and sidebar
 # ----------------------
 st.markdown("""
     <style>
+    /* Main background image */
     .stApp {
-        background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+        background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+        background-size: cover;
+        background-position: center;
         background-attachment: fixed;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: rgba(0, 0, 0, 0.6);
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+    }
+    
+    /* Sidebar headers */
+    .css-1v3fvcr h2 {
+        color: #FFD700;
+        font-family: 'Georgia', serif;
+    }
+
+    /* Input widgets */
+    .stSelectbox, .stSlider, .stColorPicker {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+    }
+
+    /* Markdown text */
+    .stMarkdown {
+        color: #ffffff;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 
@@ -190,6 +220,7 @@ elif viz_type == "3D":
 # ----------------------
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
+
 
 
 
