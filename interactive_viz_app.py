@@ -5,44 +5,54 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # ----------------------
-# Custom CSS for gradient background and sidebar aesthetics
+# Custom CSS for dark/black theme with gradient background and sidebar styling
 # ----------------------
 st.markdown("""
     <style>
-    /* Main background with soft gradient */
+    /* Main background with dark gradient */
     .stApp {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, #000000 0%, #434343 100%);
         background-attachment: fixed;
-        color: #333333;
+        color: #FFFFFF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Sidebar styling with soft transparency */
+    /* Sidebar styling */
     .css-1d391kg {
-        background: rgba(255, 255, 255, 0.9);
-        color: #333333;
+        background: rgba(0, 0, 0, 0.9);
+        color: #FFFFFF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     /* Sidebar headers */
     .css-1v3fvcr h2 {
-        color: #4A90E2;
+        color: #FFD700;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     /* Input widgets */
     .stSelectbox, .stSlider, .stColorPicker {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid #555555;
         border-radius: 8px;
-        color: #333333;
+        color: #FFFFFF;
     }
 
     /* Markdown text */
     .stMarkdown {
-        color: #333333;
+        color: #FFFFFF;
+    }
+
+    /* Buttons */
+    .stButton>button {
+        background-color: #333333;
+        color: #FFFFFF;
+        border: 1px solid #555555;
+        border-radius: 8px;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 
 st.set_page_config(layout="wide")
@@ -217,6 +227,7 @@ elif viz_type == "3D":
 # ----------------------
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
+
 
 
 
