@@ -192,3 +192,4 @@ elif viz_type == "3D":
 st.sidebar.markdown("---")
 st.sidebar.write("🎉 Have fun exploring your data! Feel free to tweak the settings and see what patterns you can uncover! 📊✨")
 
+
