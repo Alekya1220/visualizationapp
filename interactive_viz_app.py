@@ -13,41 +13,30 @@ from wordcloud import WordCloud
 # ----------------------
 st.markdown("""
     <style>
-    /* Main background with dark gradient */
     .stApp {
         background: linear-gradient(135deg, #000000 0%, #434343 100%);
         background-attachment: fixed;
         color: #FFFFFF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
-    /* Sidebar styling */
     .css-1d391kg {
         background: rgba(0, 0, 0, 0.9);
         color: #FFFFFF;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
-    /* Sidebar headers */
     .css-1v3fvcr h2 {
         color: #FFD700;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
-    /* Input widgets */
     .stSelectbox, .stSlider, .stColorPicker {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid #555555;
         border-radius: 8px;
         color: #FFFFFF;
     }
-
-    /* Markdown text */
     .stMarkdown {
         color: #FFFFFF;
     }
-
-    /* Buttons */
     .stButton>button {
         background-color: #333333;
         color: #FFFFFF;
@@ -110,9 +99,6 @@ if app_mode == "Word Cloud Generator":
 # ----------------------
 elif app_mode == "Data Visualization":
     st.subheader("Upload or Generate Data for Visualization")
-    # ----------------------
-    # Data input
-    # ----------------------
     st.sidebar.header("1️⃣ Provide Your Data")
     data_source = st.sidebar.radio("Choose data source:", ["Upload File", "Generate Random Data"])
 
@@ -152,9 +138,6 @@ elif app_mode == "Data Visualization":
         })
         st.success("Random data generated!")
 
-    # ----------------------
-    # Data preview and column selection
-    # ----------------------
     st.write("### 📋 Data Preview")
     st.dataframe(df.head())
 
@@ -175,41 +158,50 @@ elif app_mode == "Data Visualization":
         st.error("No numeric columns available for visualization.")
         st.stop()
 
-    # ----------------------
-    # Visualization settings
-    # ----------------------
     st.sidebar.header("3️⃣ Visualization Settings")
     viz_type = st.sidebar.selectbox("Choose Visualization Type", ["1D", "2D", "3D"])
 
     st.sidebar.header("4️⃣ Aesthetics Settings")
-    color = st.sidebar.color_picker("Pick a color", "#FF6347")
-    marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
-    line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
-    bins = st.sidebar.slider("Number of bins", 5, 50, 20)
+    # Common colors
+    bg_color = st.sidebar.color_picker("Background Color", "#222222")
 
-    # 1D Visualization
+    # Individual color pickers depending on visualization type
     if viz_type == "1D":
+        marker_color = st.sidebar.color_picker("Marker/Bar Color", "#FF6347")
+        edge_color = st.sidebar.color_picker("Edge Color", "#FFFFFF")
+        line_color = st.sidebar.color_picker("Line Color", "#1E90FF")
+        marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
+        line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
+        bins = st.sidebar.slider("Number of bins", 5, 50, 20)
+
         st.sidebar.subheader("1D Plot Options")
         plot_type = st.sidebar.selectbox("Select Plot Type", ["Histogram", "Line Plot", "Bar Plot"])
         col = st.sidebar.selectbox("Select Column", numeric_cols)
 
         st.write(f"### 📈 {plot_type} of {col}")
         fig, ax = plt.subplots()
+        fig.patch.set_facecolor(bg_color)
+        ax.set_facecolor(bg_color)
 
         if plot_type == "Histogram":
-            ax.hist(df[col], bins=bins, color=color, edgecolor="black")
+            ax.hist(df[col], bins=bins, color=marker_color, edgecolor=edge_color)
         elif plot_type == "Line Plot":
-            ax.plot(df[col], marker="o", linestyle=line_style, color=color)
+            ax.plot(df[col], marker="o", markersize=marker_size//10, linestyle=line_style, color=line_color)
         elif plot_type == "Bar Plot":
-            ax.bar(df.index, df[col], color=color)
+            ax.bar(df.index, df[col], color=marker_color, edgecolor=edge_color)
 
         ax.set_xlabel(col)
         ax.set_ylabel("Value")
-        ax.set_title(f"{plot_type} of {col}")
+        ax.set_title(f"{plot_type} of {col}", color="white")
         st.pyplot(fig)
 
-    # 2D Visualization
     elif viz_type == "2D":
+        marker_color = st.sidebar.color_picker("Marker Color", "#00CED1")
+        edge_color = st.sidebar.color_picker("Edge Color", "#FFD700")
+        line_color = st.sidebar.color_picker("Line Color", "#FF4500")
+        marker_size = st.sidebar.slider("Marker Size", 10, 200, 50)
+        line_style = st.sidebar.selectbox("Line Style", ["-", "--", "-.", ":"])
+
         st.sidebar.subheader("2D Plot Options")
         plot_type = st.sidebar.selectbox("Select Plot Type", ["Scatter Plot", "Box Plot", "Line Plot"])
         x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
@@ -217,23 +209,29 @@ elif app_mode == "Data Visualization":
 
         st.write(f"### 📊 {plot_type} ({x_col} vs {y_col})")
         fig, ax = plt.subplots()
+        fig.patch.set_facecolor(bg_color)
+        ax.set_facecolor(bg_color)
 
         if plot_type == "Scatter Plot":
-            ax.scatter(df[x_col], df[y_col], c=color, alpha=0.6, s=marker_size)
+            ax.scatter(df[x_col], df[y_col], c=marker_color, edgecolors=edge_color, alpha=0.8, s=marker_size)
             ax.set_xlabel(x_col)
             ax.set_ylabel(y_col)
         elif plot_type == "Box Plot":
-            df[[x_col, y_col]].plot(kind="box", ax=ax)
+            df[[x_col, y_col]].plot(kind="box", ax=ax, color=dict(boxes=marker_color, whiskers=edge_color, medians=line_color, caps=edge_color))
         elif plot_type == "Line Plot":
-            ax.plot(df[x_col], df[y_col], marker="o", linestyle=line_style, color=color)
+            ax.plot(df[x_col], df[y_col], marker="o", markersize=marker_size//10, linestyle=line_style, color=line_color, markerfacecolor=marker_color)
             ax.set_xlabel(x_col)
             ax.set_ylabel(y_col)
 
-        ax.set_title(f"{plot_type} of {x_col} & {y_col}")
+        ax.set_title(f"{plot_type} of {x_col} & {y_col}", color="white")
         st.pyplot(fig)
 
-    # 3D Visualization
     elif viz_type == "3D":
+        marker_color = st.sidebar.color_picker("Point Color", "#FF69B4")
+        edge_color = st.sidebar.color_picker("Edge Color", "#40E0D0")
+        surface_color = st.sidebar.color_picker("Surface Color", "#32CD32")
+        marker_size = st.sidebar.slider("Point Size", 10, 200, 50)
+
         st.sidebar.subheader("3D Plot Options")
         plot_type = st.sidebar.selectbox("Select Plot Type", ["3D Scatter Plot", "3D Surface Plot"])
         x_col = st.sidebar.selectbox("Select X-axis", numeric_cols)
@@ -243,27 +241,28 @@ elif app_mode == "Data Visualization":
         st.write(f"### 🧩 {plot_type}")
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
+        fig.patch.set_facecolor(bg_color)
+        # ax.set_facecolor(bg_color) # 3D axes may not support set_facecolor in matplotlib
 
         if plot_type == "3D Scatter Plot":
-            ax.scatter(df[x_col], df[y_col], df[z_col], c=color, alpha=0.6, s=marker_size)
-            ax.set_xlabel(x_col)
-            ax.set_ylabel(y_col)
-            ax.set_zlabel(z_col)
+            ax.scatter(df[x_col], df[y_col], df[z_col], c=marker_color, edgecolors=edge_color, alpha=0.8, s=marker_size)
+            ax.set_xlabel(x_col, color="white")
+            ax.set_ylabel(y_col, color="white")
+            ax.set_zlabel(z_col, color="white")
         elif plot_type == "3D Surface Plot":
             X, Y = np.meshgrid(df[x_col], df[y_col])
             Z = np.sin(X) + np.cos(Y)
-            ax.plot_surface(X, Y, Z, cmap="viridis")
+            ax.plot_surface(X, Y, Z, color=surface_color, alpha=0.7)
+            ax.set_xlabel(x_col, color="white")
+            ax.set_ylabel(y_col, color="white")
+            ax.set_zlabel("Calculated", color="white")
 
-        ax.set_title(plot_type)
+        ax.set_title(plot_type, color="white")
         st.pyplot(fig)
 
-# ----------------------
-# Footer
-# ----------------------
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
     <div style="color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         🎉 Have fun exploring your data or generating word clouds! Customize and experiment freely! 🚀📊✨
     </div>
     """, unsafe_allow_html=True)
-
