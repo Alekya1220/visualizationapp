@@ -261,4 +261,9 @@ elif app_mode == "Data Visualization":
 # Footer
 # ----------------------
 st.sidebar.markdown("---")
-st.sidebar.write("🎉 Have fun exploring your data or generating word clouds! Customize and experiment freely! 🚀📊✨")
+st.sidebar.markdown("""
+    <div style="color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        🎉 Have fun exploring your data or generating word clouds! Customize and experiment freely! 🚀📊✨
+    </div>
+    """, unsafe_allow_html=True)
+
